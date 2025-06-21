@@ -3,11 +3,9 @@ import pandas as pd
 import os
 from db.save import save_to_sql
 
-# PL_data.db yolu
-PL_DB_PATH = os.path.join("old_data", "PL_data.db")  # PL_data.db'nin yolu
+PL_DB_PATH = os.path.join("old_data", "PL_data.db")  
 DATA_DIR = "data"
 
-# PL_data.db'deki tablolarla yeni şema adı eşleşmeleri
 TABLE_MAPPING = {
     "PL_standard_data": "stats_standard",
     "PL_shooting_data": "stats_shooting",
@@ -22,16 +20,17 @@ TABLE_MAPPING = {
 }
 
 def migrate():
-    """PL_data.db'den data/data.db'ye tüm verileri migrate eder."""
+    """PL_data.db'den data klasöründeki Premier_League.db'ye verileri aktarır."""
+    if not os.path.exists(PL_DB_PATH):
+        print(f"❌ Eski DB bulunamadı: {PL_DB_PATH}")
+        return
+
     conn = sqlite3.connect(PL_DB_PATH)
 
     for old_table, new_table in TABLE_MAPPING.items():
-        # Veriyi oku
+        print(f"📥 {old_table} tablosu okunuyor...")
         df = pd.read_sql(f"SELECT * FROM {old_table}", conn)
-
-        # Yeni şema adıyla kaydet
         save_to_sql(df, db_dir=DATA_DIR, table_name=new_table, league_name="Premier League")
+
     conn.close()
-
-    print("\n✅ PL_data.db'den data/data.db'ye tüm veriler başarıyla migrate edildi!")
-
+    print("\n✅ PL_data.db'den data klasöründeki Premier_League.db'ye tüm veriler başarıyla aktarıldı!")
