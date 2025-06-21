@@ -6,7 +6,6 @@ from config import TABLES_INFO, DB_NAME
 
 
 def job():
-    """Bütün tabloları çeker, işler ve SQLite'a kaydeder."""
     try:
         driver = setup_browser()
         for name, (url, table_id) in TABLES_INFO.items():

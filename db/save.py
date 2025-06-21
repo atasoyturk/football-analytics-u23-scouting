@@ -1,7 +1,6 @@
 import sqlite3
 
 def save_to_sql(df, db_name, table_name):
-    """Verilen DataFrame'i SQLite veritabanına kaydeder."""
     conn = sqlite3.connect(db_name)
 
     # Eğer gereksiz bir kolon varsa sil

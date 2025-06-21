@@ -12,7 +12,6 @@ if __name__ == '__main__':
 
     print("⏳ Scheduler çalışıyor... (Pazar 00:00'da veri çekilecek)")
 
-    # Sonsuz döngü
     while True:
         schedule.run_pending()
         time.sleep(60)

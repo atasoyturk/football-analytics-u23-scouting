@@ -22,7 +22,6 @@ def fetch_html(driver, url, wait_time=10):
 
 
 def extract_table(html, table_id='stats_standard'):
-    """HTML'den belirtilen id'ye sahip tabloyu bulup DataFrame'e çevirir."""
     soup = BeautifulSoup(html, 'html.parser')
     table = soup.find('table', {'id': table_id})
     if not table:
