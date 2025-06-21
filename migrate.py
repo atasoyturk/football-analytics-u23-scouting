@@ -34,3 +34,6 @@ def migrate():
 
     conn.close()
     print("\n✅ PL_data.db'den data klasöründeki Premier_League.db'ye tüm veriler başarıyla aktarıldı!")
+
+if __name__ == '__main__':
+    migrate()
