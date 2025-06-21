@@ -2,19 +2,25 @@
 from scraper.setup import setup_browser
 from scraper.extract import fetch_html, extract_table
 from db.save import save_to_sql
-from config import TABLES_INFO, DB_NAME
+from config import LEAGUE_URLS, DB_NAME
 
-
-def job():
+def job(league_name):
+    """Belirtilen lig için verileri çek ve ortak DB'ye kaydet."""
     try:
+        tables = LEAGUE_URLS.get(league_name)
+        if not tables:
+            raise ValueError(f"❌ {league_name} için config bulunamadı!")
+
         driver = setup_browser()
-        for name, (url, table_id) in TABLES_INFO.items():
-            print(f"\n📊 {name.upper()} tablosu işleniyor...")
+        for name, (url, table_id) in tables.items():
+            print(f"\n📊 [{league_name}] {name.upper()} tablosu işleniyor...")
             html_content = fetch_html(driver, url)
             df = extract_table(html_content, table_id)
-            save_to_sql(df, db_name=DB_NAME, table_name=f'PL_{name}_data')
-        driver.quit()
-        print('✅ Tüm tablolar güncellendi!')
-    except Exception as e:
-        print(f"❌ Job çalışırken bir hata oluştu: {e}")
+            # db klasöründe data.db altında, lig adını da tablo isminde kullanıyoruz
+            save_to_sql(df, db_name=DB_NAME, table_name=f"{league_name.lower().replace(' ', '_')}_{name}")
 
+        driver.quit()
+        print(f"\n✅ {league_name} için tüm tablolar başarıyla güncellendi!")
+
+    except Exception as e:
+        print(f"❌ {league_name} job çalışırken hata oluştu: {e}")
