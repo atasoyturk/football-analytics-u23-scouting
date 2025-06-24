@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 def fetch_html(driver, url, wait_time=10):
-    """URL'yi açıp sayfa kaynağını döndürür."""
     driver.get(url)
     print(f"🌐 Sayfa açıldı: {url}")
 
