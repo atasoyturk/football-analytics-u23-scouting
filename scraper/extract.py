@@ -39,3 +39,21 @@ def extract_table(html, table_id='stats_standard'):
         df = df[df[player_col[0]] != player_col[0].split('_')[-1]]
 
     return df
+
+def clean_and_fix_columns(df):
+    
+    unnamed_cols = [col for col in df.columns if 'Unnamed' in str(col)]
+    if unnamed_cols:
+        df = df.drop(columns=unnamed_cols)
+        print(f"✅ Kaldırılan Unnamed kolonlar: {unnamed_cols}")
+
+    # 2. Eğer kolon MultiIndex ise tek seviyeye indir
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = ['_'.join(filter(None, map(str, col))).strip() for col in df.columns.values]
+
+    # 3. Kolon isimlerinde temizleme
+    df.columns = [col.strip().lower().replace(' ', '_') for col in df.columns]
+
+    df = df.fillna(0)
+
+    return df
