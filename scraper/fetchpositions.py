@@ -12,29 +12,24 @@ LEAGUE_LINKS = {
 }
 
 def fetch_positions(output_file="data/positions.csv"):
-    """Transfermarkt'tan tüm liglerin oyuncularını ve pozisyonlarını çeker."""
     driver = setup_browser()
     data = []
     for league_name, url in LEAGUE_LINKS.items():
         print(f"⚡️ {league_name} oyuncuları çekiliyor...")
         driver.get(url)
         time.sleep(5)  # Sayfa tam yüklensin
-
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
-        for player_row in soup.find_all("div", class_="content-row__player-name"):
-            player_name_tag = player_row.find("p", class_="player-name svelte-1cob5pt")
-            position_tag = player_row.find("span", class_="position svelte-1oziqlq")
+        # Yeni class'lardan çekiyoruz
+        for player_div in soup.find_all("div", class_="content-row__link-fix--first"):
+            name_tag = player_div.find("p", class_="player-name")
+            position_tag = player_div.find("span", class_="position")
 
-            if player_name_tag and position_tag:
-                player_name = player_name_tag.text.strip()
+            if name_tag and position_tag:
+                player_name = name_tag.text.strip()
                 position = position_tag.text.strip()
-                data.append({
-                    "Player": player_name,
-                    "Position": position,
-                    "League": league_name
-                })
-
+                data.append({"Player": player_name, "Position": position, "League": league_name})
+                
         time.sleep(2)
 
     driver.quit()
