@@ -2,6 +2,7 @@ from scraper.setup import setup_browser
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
+import os
 
 LEAGUE_LINKS = {
     "Premier League": "https://www.transfermarkt.com/premier-league/startseite/wettbewerb/GB1",
@@ -17,26 +18,29 @@ def fetch_positions(output_file="data/positions.csv"):
     for league_name, url in LEAGUE_LINKS.items():
         print(f"⚡️ {league_name} oyuncuları çekiliyor...")
         driver.get(url)
-        time.sleep(5)  # Sayfa tam yüklensin
+        time.sleep(5)
+
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
-        # Yeni class'lardan çekiyoruz
-        for player_div in soup.find_all("div", class_="content-row__link-fix--first"):
-            name_tag = player_div.find("p", class_="player-name")
-            position_tag = player_div.find("span", class_="position")
+        for p in soup.select("p.player-name"):
+            player_name = p.text.strip()
+            parent_div = p.find_parent("div", class_="content-row__player-name")
+            position_span = parent_div.find("span", class_="position") if parent_div else None
+            position = position_span.text.strip() if position_span else None
+            data.append({
+                "Player": player_name,
+                "Position": position
+            })
 
-            if name_tag and position_tag:
-                player_name = name_tag.text.strip()
-                position = position_tag.text.strip()
-                data.append({"Player": player_name, "Position": position, "League": league_name})
-                
         time.sleep(2)
 
     driver.quit()
 
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
     df = pd.DataFrame(data).drop_duplicates()
     df.to_csv(output_file, index=False, encoding="utf-8-sig")
-    print(f"✅ Positions dosyası üretildi: {output_file}")
+    print(f"✅ Positions dosyası oluşturuldu: {output_file}")
 
 if __name__ == "__main__":
     fetch_positions()
