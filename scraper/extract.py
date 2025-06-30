@@ -1,6 +1,8 @@
 # scraper/extract.py
+
 from bs4 import BeautifulSoup
 import pandas as pd
+from analysis.utils import clean_column_names  # Burada utils'ten import ediyoruz
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -28,31 +30,12 @@ def extract_table(html, table_id='stats_standard'):
 
     df = pd.read_html(str(table))[0]
 
-    # MultiIndex temizliği
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = ['_'.join(col).strip() for col in df.columns.values]
+    # 1. Kolon isimlerini temizle (utils'den geliyor)
+    df = clean_column_names(df)
 
-    # Tekrarlanan başlık satırlarını sil
-    player_col = [col for col in df.columns if 'Player' in col or 'player' in col]
+    # 2. Tekrarlanan başlık satırlarını sil
+    player_col = [col for col in df.columns if 'player' in str(col).lower()]
     if player_col:
         df = df[df[player_col[0]] != player_col[0].split('_')[-1]]
-
-    return df
-
-def clean_and_fix_columns(df):
-    
-    unnamed_cols = [col for col in df.columns if 'Unnamed' in str(col)]
-    if unnamed_cols:
-        df = df.drop(columns=unnamed_cols)
-        print(f"✅ Kaldırılan Unnamed kolonlar: {unnamed_cols}")
-
-    # 2. Eğer kolon MultiIndex ise tek seviyeye indir
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = ['_'.join(filter(None, map(str, col))).strip() for col in df.columns.values]
-
-    # 3. Kolon isimlerinde temizleme
-    df.columns = [col.strip().lower().replace(' ', '_') for col in df.columns]
-
-    df = df.fillna(0)
 
     return df

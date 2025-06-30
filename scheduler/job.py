@@ -1,6 +1,6 @@
 # scheduler/job.py
 from scraper.setup import setup_browser
-from scraper.extract import fetch_html, extract_table, clean_and_fix_columns
+from scraper.extract import fetch_html, extract_table
 from db.save import save_to_sql
 from config import LEAGUE_URLS, DB_NAME
 
@@ -16,7 +16,6 @@ def job(league_name):
             print(f"\n📊 [{league_name}] {name.upper()} tablosu işleniyor...")
             html_content = fetch_html(driver, url)
             df = extract_table(html_content, table_id)
-            df = clean_and_fix_columns(df)
             save_to_sql(df, db_name=DB_NAME, table_name=f"{league_name.lower().replace(' ', '_')}_{name}")
 
         driver.quit()
