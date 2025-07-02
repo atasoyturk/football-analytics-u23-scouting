@@ -30,3 +30,5 @@ def setup_browser():
     service = Service(CHROME_DRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
+
+#test
