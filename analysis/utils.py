@@ -12,7 +12,7 @@ def clean_column_names(df):
     new_cols = []
     for col in df.columns:
         if str(col).lower().startswith('unnamed'):
-            new_col = str(col).split('_')[-1].strip()
+            new_col = str(col).split('_')[-1].strip() #strip() methodu ile baştaki ve sondaki boşlukları kaldır
             new_cols.append(new_col)
         else:
             new_cols.append(str(col).strip())

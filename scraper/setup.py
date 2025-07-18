@@ -1,13 +1,14 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+from selenium import webdriver #selenium modülünden webdriver sınıfını içe aktarır.
+from selenium.webdriver.chrome.service import Service #selenium modülünden Chrome tarayıcısını kontrol etmek için gerekli olan Service sınıfını içe aktarır.
+from selenium.webdriver.chrome.options import Options #selenium modülünden Chrome tarayıcısının seçeneklerini ayarlamak için gerekli olan Options sınıfını içe aktarır.
 from config import BRAVE_PATH, CHROME_DRIVER_PATH
 
 
 def setup_browser():
 
-    chrome_options = Options()
+    chrome_options = Options() #Options fonksiyonu, Chrome tarayıcısının seçeneklerini ayarlamak için kullanılır.
     chrome_options.add_argument('--headless') #browser kullanıcı arayüzü olmadan arkaplanda çalısır, daha az kaynak tüketir
+    
     chrome_options.add_argument('--no-sandbox') #sandbox, tarayıcıyı izole eden bir güvenlik özelliğidir. Bu seçenek, sandbox'u devre dışı bırakır.
     #fakat bu komut dosyalara erişim izni verebilir, bu yüzden dikkatli kullanılmalıdır.
     #genellikle güvenlik riski taşıdıgı icin tavsiye edilmeyen bir ayardır, o yüzden genelde sandbox tercih edilir.
@@ -27,8 +28,9 @@ def setup_browser():
     
     chrome_options.binary_location = BRAVE_PATH
 
-    service = Service(CHROME_DRIVER_PATH)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    service = Service(CHROME_DRIVER_PATH) # ChromeDriver'ın konumunu belirtir.
+    
+    driver = webdriver.Chrome(service=service, options=chrome_options) #webdriver.Chrome, Chrome tarayıcısını başlatır.
     return driver
 
 #test

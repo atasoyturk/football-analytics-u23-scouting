@@ -5,7 +5,7 @@ CHROME_DRIVER_PATH = r"C:\drivers\chromedriver-win64\chromedriver-win64\chromedr
 # Tek bir ortak database
 DB_NAME = r"data\data.db"
 
-# Lig bazlı TABLES_INFO
+# Lig bazlı TABLES_INFO, dictionary olarak tanımlanır.
 LEAGUE_URLS = {
     "Premier League": {
         'standard': ('https://fbref.com/en/comps/9/stats/Premier-League-Stats', 'stats_standard'),

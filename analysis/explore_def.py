@@ -47,8 +47,8 @@ if __name__ == "__main__":
     create_position_metric(
         db_name="data/data.db",
         output_table="def_metrics",
-        lig_prefixes=LIG_PREFIXES, # Yeni parametre
-        metric_suffixes=METRIC_SUFFIXES, # Tablo son ekleri
-        metric_suffix_abbreviations=METRIC_SUFFIX_ABBREVIATIONS, # Kısaltmalar
+        lig_prefixes=LIG_PREFIXES, 
+        metric_suffixes=METRIC_SUFFIXES, 
+        metric_suffix_abbreviations=METRIC_SUFFIX_ABBREVIATIONS, 
         id_columns=ID_COLUMNS
     )
