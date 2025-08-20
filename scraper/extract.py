@@ -1,5 +1,3 @@
-# scraper/extract.py
-
 from bs4 import BeautifulSoup 
 '''
 Beautiful Soup Nedir?
@@ -32,14 +30,15 @@ sayfaya eklenip eklenmediğini veya bir metnin belirli bir elementte olup olmad�
 
 def fetch_html(driver, url, wait_time=10):
     driver.get(url)
-    print(f"🌐 Sayfa açıldı: {url}")
+    print(f"Website opened: {url}")
 
     try:
+        # WebDriverWait, belirli bir süre boyunca (wait_time) belirtilen koşul karşılanana kadar bekler.
         WebDriverWait(driver, wait_time).until(
             EC.presence_of_element_located((By.TAG_NAME, "table"))
         )
     except Exception as e:
-        print(f"⚠️ Sayfa yüklenirken hata oluştu: {e}")
+        print(f"Scraping error: {e}")
 
     return driver.page_source
 
@@ -55,7 +54,7 @@ def extract_table(html, table_id='stats_standard'):
     #soup nesnesinin find() metodu, HTML içeriğinde belirli bir etiketi (tag) ve bu etikete ait özellikleri (attributes) arar.
     # Bu örnekte, 'table' etiketi ve 'id' özelliği 'stats_standard' olan tabloyu arar, ve eğer bulursa bu tabloyu döndürür.
     if not table:
-        raise ValueError(f"{table_id} ID'li tablo bulunamadı.")
+        raise ValueError(f"{table_id} could not be found.")
 
     df = pd.read_html(str(table))[0] #pd.read_html() fonksiyonu, HTML içeriğinden tabloyu okur ve bir DataFrame'e dönüştürür.
     # paramtere olarak pandasın anlayabileceği standart bir HTML dizinine yani string'e ihtiyacı vardır. (bazen url de alabilir)

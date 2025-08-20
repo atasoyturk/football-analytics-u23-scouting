@@ -1,6 +1,6 @@
 # analysis/explore_def.py
 
-from analysis.build_metrics import create_position_metric
+from analysis.create_player_stats import create_position_metric
 
 # Artık 'player' dışındaki ID kolonlarını da buraya ekliyoruz
 ID_COLUMNS = ["player", "nation", "pos", "squad", "age", "90s"]

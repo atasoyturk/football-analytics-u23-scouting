@@ -33,4 +33,3 @@ def setup_browser():
     driver = webdriver.Chrome(service=service, options=chrome_options) #webdriver.Chrome, Chrome tarayıcısını başlatır.
     return driver
 
-#test

@@ -1,15 +1,7 @@
 import sqlite3
 
-
 def save_to_sql(df, db_name, table_name):
-    """
-    Temizlenmiş DataFrame'i SQLite veritabanına yazar.
     
-    Args:
-        df (pd.DataFrame): Kaydedilecek veri
-        db_name (str): Veritabanı dosya adı
-        table_name (str): Tablo adı
-    """
     try:
         with sqlite3.connect(db_name) as conn: #with (context manager) kullanılarak veritabanı bağlantısı açılır. connect() methodunun döndürdüğü bağlantı nesnesi, conn değişkenine atanır.
             #  Bir with bloğuna girdiğinizde, kaynak (burada veritabanı bağlantısı) otomatik olarak açılır.

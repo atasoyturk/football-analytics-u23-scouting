@@ -1,4 +1,4 @@
-from analysis.build_metrics import create_position_metric
+from analysis.create_player_stats import create_position_metric
 
 ID_COLUMNS = ["player", "nation", "pos", "squad", "age", "born", "minutes"]
 
