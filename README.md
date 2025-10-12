@@ -82,6 +82,16 @@ A 9-page Power BI dashboard provides comprehensive analysis including:
 - Squad-level aggregations and age cohort analysis
 - Interactive filters for profile, team, and nation
 
+### Dashboard Preview
+
+* Some photos about my powerBI dashboard
+
+![Dashboard Overview](screenshots/general_stats&_attack_profiles.png)
+
+![Value Flags Distribution](screenshots/player_value_flags.png)
+
+![Top Players Ranking](screenshots/attack_profile_scores&_scout_table.png)
+
 ## Automated Updates
 
 **Weekly Refresh Schedule:** Every Sunday at 00:00 UTC
