@@ -1,15 +1,13 @@
-# scheduler/job.py
 from scraper.setup import setup_browser
 from scraper.extract import fetch_html, extract_table
-from db.save import save_to_sql
+from db.save_all_tables import save_to_sql
 from config import LEAGUE_URLS, DB_NAME
 
 def job(league_name):
-    """Belirtilen lig için verileri çek ve ortak DB'ye kaydet."""
     try:
         tables = LEAGUE_URLS.get(league_name)
         if not tables:
-            raise ValueError(f"❌ {league_name} için config bulunamadı!")
+            raise ValueError(f"{league_name} için config bulunamadı!")
 
         driver = setup_browser()
         for name, (url, table_id) in tables.items():

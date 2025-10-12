@@ -1,9 +1,4 @@
-# config.py
 BRAVE_PATH = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
-CHROME_DRIVER_PATH = r"C:\drivers\chromedriver-win64\chromedriver-win64\chromedriver.exe"
-
-# Tek bir ortak database
-# r means raw string, Ignore Escape Character Sequences.
 DB_NAME = r"data\data.db" 
 
 # Lig bazlı TABLES_INFO, dictionary olarak tanımlanır.
@@ -19,6 +14,7 @@ LEAGUE_URLS = {
         'playing_time': ('https://fbref.com/en/comps/9/playingtime/Premier-League-Stats', 'stats_playing_time'),
         'miscellaneous': ('https://fbref.com/en/comps/9/misc/Premier-League-Stats', 'stats_misc'),
         'goalkeeping': ('https://fbref.com/en/comps/9/keepersadv/Premier-League-Stats', 'stats_keeper_adv'),
+        'advanced_gk' : ('https://fbref.com/en/comps/9/keepers/Premier-League-Stats', 'stats_keeper')
     },
     
     "La Liga": {
@@ -32,6 +28,8 @@ LEAGUE_URLS = {
         'playing_time': ('https://fbref.com/en/comps/12/playingtime/La-Liga-Stats', 'stats_playing_time'),
         'miscellaneous': ('https://fbref.com/en/comps/12/misc/La-Liga-Stats', 'stats_misc'),
         'goalkeeping': ('https://fbref.com/en/comps/12/keepersadv/La-Liga-Stats', 'stats_keeper_adv'),
+        'advanced_gk' : ('https://fbref.com/en/comps/12/keepers/Premier-League-Stats', 'stats_keeper')
+
     },
     
     "Bundesliga": {
@@ -45,6 +43,8 @@ LEAGUE_URLS = {
         'playing_time': ('https://fbref.com/en/comps/20/playingtime/Bundesliga-Stats', 'stats_playing_time'),
         'miscellaneous': ('https://fbref.com/en/comps/20/misc/Bundesliga-Stats', 'stats_misc'),
         'goalkeeping': ('https://fbref.com/en/comps/20/keepersadv/Bundesliga-Stats', 'stats_keeper_adv'),
+        'advanced_gk' : ('https://fbref.com/en/comps/20/keepers/Premier-League-Stats', 'stats_keeper')
+
     },
     
     "Serie A": {
@@ -58,6 +58,8 @@ LEAGUE_URLS = {
         'playing_time': ('https://fbref.com/en/comps/11/playingtime/Serie-A-Stats', 'stats_playing_time'),
         'miscellaneous': ('https://fbref.com/en/comps/11/misc/Serie-A-Stats', 'stats_misc'),
         'goalkeeping': ('https://fbref.com/en/comps/11/keepersadv/Serie-A-Stats', 'stats_keeper_adv'),
+        'advanced_gk' : ('https://fbref.com/en/comps/11/keepers/Premier-League-Stats', 'stats_keeper')
+        
     },
     
     "Ligue 1": {
@@ -71,6 +73,8 @@ LEAGUE_URLS = {
         'playing_time': ('https://fbref.com/en/comps/13/playingtime/Ligue-1-Stats', 'stats_playing_time'),
         'miscellaneous': ('https://fbref.com/en/comps/13/misc/Ligue-1-Stats', 'stats_misc'),
         'goalkeeping': ('https://fbref.com/en/comps/13/keepersadv/Ligue-1-Stats', 'stats_keeper_adv'),
+        'advanced_gk' : ('https://fbref.com/en/comps/13/keepers/Premier-League-Stats', 'stats_keeper')
+   
     }
 
 }

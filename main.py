@@ -1,20 +1,26 @@
-import schedule
-import time
 from scheduler.job import job
+from analysis.master_table import create_master_table
+from analysis.player_finding import find_players
+from config import LEAGUE_URLS
 
-LEAGUES = ["Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1"]
+def main():
+    
+    try:
+        print("STEP 1: Scraping & Saving League Tables ")
+        for league_name in LEAGUE_URLS.keys():
+            job(league_name)
 
-if __name__ == '__main__':
-    # Program açılır açılmaz tüm ligler için veriyi çek
-    for league in LEAGUES:
-        job(league_name=league)
+        print("\n STEP 2: Creating Master Table")
+        create_master_table()
+        
+        print("\nFinding and Profiling Players")
+        find_players()
 
-    # Her pazar 00:00'da tüm ligler için veri çekme işlemini planla
-    for league in LEAGUES:
-        schedule.every().sunday.at("00:00").do(job, league_name=league)
+        print("\n-Pipeline completed-")
 
-    print("⏳ Scheduler çalışıyor... Her Pazar 00:00'da tüm liglerin verileri güncellenecek.")
+    except Exception as e:
+        print(f"\n Pipeline terminated due to error: {e}")
 
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+
+if __name__ == "__main__":
+    main()

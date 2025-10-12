@@ -5,8 +5,10 @@ Beautiful Soup, HTML ve XML dosyalarından veri çekmek için tasarlanmış bir 
 Web sayfalarının yapısını (tag'leri, ID'leri, class'ları vb.) çözümleyerek, bu yapı içindeki belirli elementlere kolayca ulaşmanızı, 
 onların içeriğini okumanızı veya niteliklerini (attribute'larını) çekmenizi sağlar.
 '''
+
 import pandas as pd
-from analysis.utils import clean_column_names  
+from analysis.utils import clean_column_names
+
 from selenium.webdriver.common.by import By
 '''
 Selenium'a web sayfasındaki elementleri nasıl bulacağınıza dair farklı stratejileri ("By" mekanizmaları) sağlar. 
