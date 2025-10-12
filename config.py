@@ -1,7 +1,6 @@
 BRAVE_PATH = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
 DB_NAME = r"data\data.db" 
 
-# Lig bazlı TABLES_INFO, dictionary olarak tanımlanır.
 LEAGUE_URLS = {
     "Premier League": {
         'standard': ('https://fbref.com/en/comps/9/stats/Premier-League-Stats', 'stats_standard'),

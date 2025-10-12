@@ -1,3 +1,7 @@
+
+# Turkish notes here to study 
+
+
 from bs4 import BeautifulSoup 
 '''
 Beautiful Soup Nedir?

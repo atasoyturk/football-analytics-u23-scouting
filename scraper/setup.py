@@ -1,3 +1,7 @@
+
+# Turkish notes here to study
+
+
 from selenium import webdriver  # selenium modülünden webdriver sınıfını içe aktarır.
 from selenium.webdriver.chrome.service import Service  # selenium modülünden Chrome tarayıcısını kontrol etmek için gerekli olan Service sınıfını içe aktarır.
 from selenium.webdriver.chrome.options import Options  # selenium modülünden Chrome tarayıcısının seçeneklerini ayarlamak için gerekli olan Options sınıfını içe aktarır.

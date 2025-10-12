@@ -25,38 +25,36 @@ def create_master_table():
                     df_to_merge = pd.read_sql(f'SELECT * FROM {table_to_merge_name}', conn)
                     print(f"  Merging {suffix}: {len(df_to_merge)} satır", end="")
                     
-                    # ÖZEL DURUM: playing_time için aggregate yap
+                    # special case for playing_time
                     if suffix == "playing_time":
-                        merge_keys = ["player", "nation", "pos", "age"]  # squad'ı çıkar
+                        merge_keys = ["player", "nation", "pos", "age"]  
                         
-                        # Numeric sütunları topla, non-numeric için ilkini al
                         numeric_cols = df_to_merge.select_dtypes(include=['number']).columns.tolist()
                         
-                        # Merge key olmayanları topla
+                        # sum of non numeric keys
                         agg_dict = {}
                         for col in df_to_merge.columns:
                             if col not in merge_keys and col != 'squad' and col not in ['rk', 'born', 'matches']:
                                 if col in numeric_cols:
-                                    agg_dict[col] = 'sum'  # Sayısal değerleri topla
+                                    agg_dict[col] = 'sum'  
                         
-                        # Squad için son takımı al (veya en fazla oynadığı takım)
+                        # player's squad = his last squad
                         agg_dict['squad'] = 'last'
                         
                         df_to_merge = df_to_merge.groupby(merge_keys, as_index=False).agg(agg_dict)
-                        print(f" -> {len(df_to_merge)} satıra indirildi")
+                        print(f" -> {len(df_to_merge)} is last case")
                     else:
                         merge_keys = ["player", "nation", "pos", "squad", "age"]
                         print()
                     
-                    # Duplicate kontrol - aynı anahtarlara sahip birden fazla satır varsa ilkini al
+                    # Duplicate control
                     before_drop = len(df_to_merge)
                     df_to_merge = df_to_merge.drop_duplicates(subset=merge_keys, keep='first')
                     after_drop = len(df_to_merge)
                     
                     if before_drop != after_drop:
-                        print(f"    ⚠️  {before_drop - after_drop} duplicate satır kaldırıldı")
+                        print(f"    ⚠️  {before_drop - after_drop} duplicate rows removed")
                     
-                    # Merge et
                     before_merge = len(league_df)
                     league_df = league_df.merge(
                         df_to_merge,
@@ -67,21 +65,21 @@ def create_master_table():
                     after_merge = len(league_df)
                     
                     if after_merge != before_merge:
-                        print(f"🔴 UYARI: Satır sayısı değişti! {before_merge} -> {after_merge}")
+                        print(f"Num of rows has changed {before_merge} -> {after_merge}")
                 
                 except pd.io.sql.DatabaseError:
-                    print(f"UYARI: '{table_to_merge_name}' tablosu bulunamadı. Atlanıyor.")
+                    print(f"'{table_to_merge_name}' table couldnt found, skipping")
                     continue
                 except Exception as e:
-                    print(f"HATA: {str(e)}")
+                    print(f"{str(e)}")
                     continue
             
             league_df['league'] = league.replace('_', ' ').title()
             all_leagues_dfs.append(league_df)
-            print(f"  ✓ {league} tamamlandı: {len(league_df)} satır\n")
+            print(f"{league} completed.: {len(league_df)} rows\n")
             
         except pd.io.sql.DatabaseError:
-            print(f"Table {base_table_name} not found for {league}. Skipping...")
+            print(f"Table {base_table_name} not found for {league}, skipping")
             continue
         
     conn.close()
@@ -95,23 +93,23 @@ def create_master_table():
     
     master_df = master_df.fillna(0)
     
-    # Matches sütunlarını kaldır
+    # Matches columsn are unnecessary
     matches_columns = [col for col in master_df.columns if col.startswith('matches')]
     if matches_columns:
         master_df = master_df.drop(columns=matches_columns)
     
-    # Gereksiz sütunları kaldır
+    #just basis columns are okey
     basis_names = ['rk', 'born', '90s']
     basis_columns = [col for col in master_df.columns if any(col.startswith(name) and col != name for name in basis_names)]
     if basis_columns:
         master_df = master_df.drop(columns=basis_columns)
     
-    #oyuncu ismi 'player' olan satırları kaldır
+    #some of were incorrect
     master_df = master_df[master_df['player'] != 'Player']
 
     print(f"\nFinal master table: {master_df.shape}")
     
-    # master tablosunu kaydet    
+    #save master table 
     try:
         with sqlite3.connect(DB_PATH) as conn:
             master_df.to_sql("master_table", conn, if_exists="replace", index=False)

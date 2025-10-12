@@ -22,7 +22,7 @@ def evaluate_columns():
             prefixes = df_non_basis.columns.str.split('_').str[0].value_counts()
             
     except Exception as e:
-        print("An error occurred: ", str(e))
+        print("", str(e))
         
     plt.figure(figsize=(10, 6))
     prefixes.plot(kind='bar')
@@ -100,6 +100,7 @@ def select_target_columns():
                     'progression_prgp',
                     'kp'
                 ],
+                # Turkish explanations
                 'Description': [
                     # Finishing (16)
                     'Toplam şut sayısı',
@@ -164,7 +165,3 @@ def select_target_columns():
         print("An error occurred: ", str(e))
         return None
 
-if __name__ == "__main__":
-    #evaluate_columns()
-    metrics_df = select_target_columns()
-    #print(metrics_df.head(10)) 

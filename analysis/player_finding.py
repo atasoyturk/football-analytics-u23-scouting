@@ -22,12 +22,12 @@ def reduce_columns():
                 availables = [m for m in metric_names if m in df.columns]
                 
                 if not availables:
-                    print(f"Warning: No metrics found for category '{category}'")
+                    print(f" No metrics found for category '{category}'")
                     continue
                 
                 numeric_cols = df[availables].select_dtypes(include=np.number).columns.tolist()
                 if not numeric_cols:
-                    print(f"Warning: No numeric metrics in category '{category}'")
+                    print(f"No numeric metrics in category '{category}'")
                     continue
                 
                 data = df[numeric_cols].fillna(0)
@@ -48,7 +48,7 @@ def reduce_columns():
             
             selected_metrics = list(dict.fromkeys(selected_metrics))
             
-            print(f"\n✅ Selected {len(selected_metrics)} metrics using CV + Redundancy:")
+            print(f"\nSelected {len(selected_metrics)} metrics using CV + Redundancy:")
             for metric in selected_metrics:
                 row = metrics_df[metrics_df['Metric'] == metric].iloc[0]
                 print(f"- [{row['Category']}] {metric}: {row['Description']}")
@@ -59,7 +59,8 @@ def reduce_columns():
         print("❌ Error:", str(e))
         raise
     
-def outlier_test():
+# just one check 
+#def outlier_test():
     
     try: 
         with sqlite3.connect(db_path) as conn:
@@ -74,7 +75,7 @@ def outlier_test():
             
             result = desc[['count', 'mean', 'std', 'min', '1%', '25%', '50%', '75%', '99%', 'max', 'outlier_upper', 'outlier_lower']]
             
-            print("\n📊 Outlier analizi (ilk 15 metrik):")
+            print("\n Outliers:")
             print(result.head(15).to_string())
             
     except Exception as e:
@@ -87,7 +88,7 @@ def assign_profiles(df, selected_metrics):
 
     df = df.copy()
     
-    # take-ons_tkld varsa ters çevir
+    # take-ons_tkld reverse for correct metric
     if 'take-ons_tkld' in selected_metrics:
         df['take-ons_tkld_inv'] = 1 / (1 + df['take-ons_tkld'])
         tkld_col = 'take-ons_tkld_inv'
@@ -98,26 +99,27 @@ def assign_profiles(df, selected_metrics):
     if tkld_col:
         cols_to_scale.append(tkld_col)
     
-    # --- 🔍 Outlier analizine dayalı scaler seçimi ---
+    #outlier ratio to apply correct scale method
     desc = df[cols_to_scale].describe(percentiles=[0.01, 0.25, 0.75, 0.99]).T
     desc['iqr'] = desc['75%'] - desc['25%']
     desc['outlier_upper'] = desc['99%'] > (desc['75%'] + 1.5 * desc['iqr'])
-    desc['outlier_ratio'] = desc['outlier_upper'].astype(int)  # 1 = uç değerli
+    desc['outlier_ratio'] = desc['outlier_upper'].astype(int)  
     
-    # Uç değerli metrikleri RobustScaler ile ölçekle
+    # RobustScaler 
     robust_cols = desc[desc['outlier_ratio'] == 1].index.tolist()
     standard_cols = [c for c in cols_to_scale if c not in robust_cols]
 
     df_scaled = pd.DataFrame(index=df.index)
     
     if standard_cols:
+        #Standart scaler
         scaler_std = StandardScaler()
         df_scaled[standard_cols] = scaler_std.fit_transform(df[standard_cols].fillna(0))
     if robust_cols:
         scaler_rob = RobustScaler()
         df_scaled[robust_cols] = scaler_rob.fit_transform(df[robust_cols].fillna(0))
 
-    # --- Profiller ---
+    # Profile assign
     profiles = {
         'Finisher': ['expected_g-xg', 'standard_g_sh', 'standard_sot_90'],
         'Volume Shooter': ['standard_sh_90', 'standard_fk'],
@@ -131,6 +133,7 @@ def assign_profiles(df, selected_metrics):
         ]
     }
 
+    #profile scores logic
     profile_scores = {}
     for profile, metrics in profiles.items():
         valid_metrics = [m for m in metrics if m in df_scaled.columns]
@@ -148,10 +151,10 @@ def assign_profiles(df, selected_metrics):
         .str.replace('_score', '')
     )
 
-    # Bilgi çıktısı
-    print(f"\nScaler Özeti:")
-    print(f" - RobustScaler ile işlenen metrik sayısı: {len(robust_cols)}")
-    print(f" - StandardScaler ile işlenen metrik sayısı: {len(standard_cols)}")
+    
+    print(f"\nScaler results:")
+    print(f"Metrics applied RobustScaler: {len(robust_cols)}")
+    print(f"Metrics applied StandartScaler: {len(standard_cols)}")
 
     return df
 
@@ -171,60 +174,59 @@ def find_players():
             
             df = df[required_cols].copy()
             
-            # Pozisyon filtresi
+            # attacking players
             df = df[df['pos'].str.contains(r'FW|MF', case=False, na=False, regex=True)]
             
-            # Dakika eşiği
+            # +90 minutes for young players could be threshold for youngs
             MIN_MINUTES = 90
             df = df[df['playing_time_min'] >= MIN_MINUTES]
             
-            # Age düzeltme
+            # Age column cleaning
             df['age_clean'] = df['age'].astype(str).str.split('-').str[0]
             df['age'] = pd.to_numeric(df['age_clean'], errors='coerce')
             df = df.dropna(subset=['age'])
             df['is_youth'] = df['age'] <= 23
 
             df[selected_metrics] = df[selected_metrics].fillna(0)
-            print(f"Filtre sonrası {len(df)} FW/MF oyuncusu kaldı.")
-            print(f"Genç oyuncular: {df['is_youth'].sum()}")
+            print(f"After filter {len(df)} FW/MF players exist now.")
+            print(f"U23 playeers:: {df['is_youth'].sum()}")
+            #-----------
             
-            # 🧩 Playmaker sütunları varsa ama seçilmediyse dahil et
+            #playmaker columns was not in the column
             playmaker_cols = ['gca_gca90','gca_types_to','gca_types_sh','sca_types_to','sca_types_fld','carries_cpa']
             extra_cols = [c for c in playmaker_cols if c in df.columns and c not in selected_metrics]
             if extra_cols:
-                print(f"\n⚠️ Playmaker metrikleri eklendi (reduce_columns'ta yoktu): {extra_cols}")
+                print(f"\nPlaymaker metrics are added: {extra_cols}")
                 selected_metrics.extend(extra_cols)
             
-            # 🔥 Profil atama (Robust/StandardScaler zaten burada)
+            #profile assigngin
             df = assign_profiles(df, selected_metrics)
             
-            # ------------------- Değer flag’leri -------------------
             from sklearn.preprocessing import MinMaxScaler
-
+            
+            #overall impact metric,  with selected metrics
             scaler_total = MinMaxScaler(feature_range=(0,0.5))
             scaled_total = scaler_total.fit_transform(df[selected_metrics].fillna(0))
             df['overall_impact'] = scaled_total.mean(axis=1)
 
-            # hidden_gem: yüksek etki ama düşük dakika
+            # hidden_gem
             df['minutes_rank'] = df['playing_time_min'].rank(pct=True)
             df['impact_rank'] = df['overall_impact'].rank(pct=True)
             df['hidden_gem'] = (df['impact_rank'] >= 0.7) & (df['minutes_rank'] <= 0.4)
 
-            # high_potential_youth: genç ve etkili
+            # high_potential
             df['high_potential_youth'] = df['is_youth'] & (df['impact_rank'] >= 0.6)
 
-            # elite_performer: etkinin en üst %10'u
+            # elite_performer
             df['elite_performer'] = df['impact_rank'] >= 0.9
             
-            # Genç oyuncuları filtrele
             df_youth = df[df['is_youth']]
             df_youth_copy = df_youth.copy()
 
-            
-            # Görüntüleme
+            #dispaly cols for dashboard
             display_cols = basis_cols + [
                 'attack_profile', 'hidden_gem', 'high_potential_youth', 'elite_performer', 'overall_impact',
-                'Finisher_score', 'Dribbler_score', 'Playmaker_score', 'Volume Shooter_score'  # << ekledik
+                'Finisher_score', 'Dribbler_score', 'Playmaker_score', 'Volume Shooter_score'  
             ]
             display_cols = [col for col in display_cols if col in df_youth.columns]
             
@@ -232,18 +234,17 @@ def find_players():
                 if col in df_youth_copy.columns:
                     df_youth_copy[col] = df_youth_copy[col].round(4)
                         
-            #-----------csv kaydetme, PowerBI-----------
             df_youth_copy[display_cols].to_csv("df.csv", index=False, decimal=".")
             
-            print("\nİlk 10 genç oyuncu (profil + değer flag’leri):")
+            print("\nTop 10 young stars:")
             print(df_youth[display_cols].head(10).to_string(index=False))
             
-            # Profil dağılımı
+            # Profile dist.
             attack_counts = df_youth.groupby('attack_profile').size().sort_values(ascending=False)
             print("\nProfil dağılımı:")
             print(attack_counts)
             
-            return df  # istersen tüm df’yi döndür
+            return df  
 
     except Exception as e:
         print(f"Error: {str(e)}")
