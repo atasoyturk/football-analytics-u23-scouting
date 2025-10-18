@@ -223,7 +223,7 @@ A 12-page Power BI dashboard provides comprehensive analysis including:
 
 ![Top Players Ranking](screenshots/scout_table.jpg)
 
-* For example, a brief demonstration of how to use the dashboard for a player
+* **For example, a brief demonstration of how to use the dashboard for a player**
 
   ![Romulo in all players](screenshots/romulo_all.jpg)
   
@@ -235,11 +235,11 @@ A 12-page Power BI dashboard provides comprehensive analysis including:
 
   ![Romulo in finishers with a flag](screenshots/romulo_finishers_haveflags.jpg)
 
-    * This time, you can see the Romulo's profile scores among finishers with at least one flag.
+    * This time, you can see the Romulo's profile scores among finishers with at least one flag. (competitive benchmarking)
  
     ![Romulo in elite finishers](screenshots/romulo_finishers_eliteperformers.jpg)
 
-    * Finally, if you click on elite performer slicer, you can see Romulo's performance only among elite performers in finishers.
+    * Finally, if you click on elite performer slicer, you can see Romulo's performance only among elite performers in finishers. (Romulo appears just in elite performers)
  
   * When the player was analyzed, it was noticed that while no slicer was selected, the player's overall scores were above average. However, as seen in the last photo, when the player was analyzed as a finisher elite performer, the player could be seen as an average player for that category.
  
