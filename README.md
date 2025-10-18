@@ -208,7 +208,7 @@ A 12-page Power BI dashboard provides comprehensive analysis including:
 
 ![Flags Distribution](screenshots/flags.png)
 
-![Top Players Ranking](screenshots/scout_table.png)
+![Top Players Ranking](screenshots/scout_table.jpg)
 
 ## Automated Updates
 
