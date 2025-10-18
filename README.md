@@ -1,5 +1,21 @@
 # ⚽ Football Analytics: U23 Attack Profile Classification & Scouting
 
+## 📚 Table of Contents
+- [Project Overview](#project-overview)
+- [Objective & Motivation](#objective--motivation)
+- [Methodology](#methodology)
+  - [Data Collection (FBref Scraper)](#data-collection-fbref-scraper)
+  - [Feature Engineering & Metric Selection](#feature-engineering--metric-selection)
+  - [Dimensionality Reduction & Clustering](#dimensionality-reduction--clustering)
+  - [Role-Based Profiling Logic](#role-based-profiling-logic)
+- [Dashboard & Visualization](#dashboard--visualization)
+- [Results & Player Profiling Insights](#results--player-profiling-insights)
+- [Technical Stack](#technical-stack)
+- [Installation & Usage](#installation--usage)
+- [Limitations & Future Work](#limitations--future-work)
+- [License](#license)
+- [Author & Contact](#author--contact)
+
 ## Overview
 This project implements a scouting pipeline that scrapes performance data for 2,176 players using Selenium and BeautifulSoup, analyzes 48+ statistical metrics, and classifies U23 attacking players into distinct profiles. 
 
