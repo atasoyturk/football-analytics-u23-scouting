@@ -7,7 +7,7 @@
   - [Feature Engineering](#feature-engineering)
   - [Profile Classification](#attack-profile-classification)
       - [Profile Validation](#profile-validation)
-  - [Flag System](#flag-sytem)
+  - [Flag System](#flag-system)
       - [Flag Validation](#flag-validation)
   - [Scoring Methodology](#scoring-methodology)
 - [Interactive Dashboard](#interactive-dashboard)
