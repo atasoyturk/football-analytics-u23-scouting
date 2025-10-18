@@ -15,7 +15,7 @@
 - [Author](#author)
 
 ## Overview
-This project implements a scouting pipeline that scrapes performance data for 2,176 players using Selenium and BeautifulSoup, analyzes 48+ statistical metrics, and classifies U23 attacking players into distinct profiles. 
+This project implements a scouting pipeline that scrapes performance data for 2,176 players using Selenium and BeautifulSoup, analyzes 48+ attacking statistical metrics, and classifies U23 attacking players into distinct profiles. 
 
 
 ### Design Phiosophy
