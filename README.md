@@ -205,7 +205,6 @@ The divisor (3.5) and multiplier (200) normalize the raw composite score to a pr
 **This framework prioritizes efficient performers in limited roles (high impact per minute) while accounting for reliability (sample size), youth potential (age), and market inefficiency (undervalued discoveries).**
 
 
-
 ## Interactive Dashboard
 
 A 12-page Power BI dashboard provides comprehensive analysis including:
@@ -223,6 +222,29 @@ A 12-page Power BI dashboard provides comprehensive analysis including:
 ![Flags Distribution](screenshots/flags.png)
 
 ![Top Players Ranking](screenshots/scout_table.jpg)
+
+* For example, a brief demonstration of how to use the dashboard for a player
+
+  ![Romulo in all players](screenshots/romulo_all.jpg)
+  
+    * When you click on Romulo in the player table on the right, if the other slicers are not active, you can see Romulo's scores based on his average attack profiles in the table on the left (among all players).
+  
+  ![Romulo in finishers](screenshots/romulo_finishers.jpg)
+  
+    * If you only want to look to the player among finishers, you see Romulo's attack profile scores distribution among just finishers in the left table (those have higher finisher scores)
+
+  ![Romulo in finishers with a flag](screenshots/romulo_finishers_haveflags.jpg)
+
+    * This time, you can see the Romulo's profile scores among finishers with at least one flag.
+ 
+    ![Romulo in elite finishers](screenshots/romulo_finishers_eliteperformers.jpg)
+
+    * Finally, if you click on elite performer slicer, you can see Romulo's performance only among elite performers in finishers.
+ 
+  * When the player was analyzed, it was noticed that while no slicer was selected, the player's overall scores were above average. However, as seen in the last photo, when the player was analyzed as a finisher elite performer, the player could be seen as an average player for that category.
+ 
+  * This type of analysis can be done not only on an individual player basis but also on a team basis, allowing you to see which players are on the team and how they are distributed.
+
 
 ## Automated Updates
 
