@@ -5,33 +5,6 @@ import os
 
 db_path = os.path.abspath("data/data.db")
 
-def evaluate_columns():
-    
-    if not os.path.exists(db_path):
-        raise FileNotFoundError(f"Database not found: {db_path}")
-    
-    try: 
-        with sqlite3.connect(db_path) as conn:
-            print(f"Connected to database: {db_path}")
-            
-            df = pd.read_sql("SELECT * FROM master_table", conn)
-            
-            basis_cols = ['rk', 'nation', 'pos', 'squad', 'age', 'born']
-            df_non_basis = df.drop(columns=basis_cols)
-            
-            prefixes = df_non_basis.columns.str.split('_').str[0].value_counts()
-            
-    except Exception as e:
-        print("", str(e))
-        
-    plt.figure(figsize=(10, 6))
-    prefixes.plot(kind='bar')
-    plt.title('Player Metric Prefix Distribution')
-    plt.xlabel("Prefixes")
-    plt.ylabel("Count")
-    plt.grid(axis='y')
-    plt.tight_layout()
-    plt.show()
     
 def select_target_columns():
     if not os.path.exists(db_path):

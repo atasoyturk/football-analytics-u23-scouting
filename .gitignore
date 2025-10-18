@@ -55,6 +55,7 @@ env/
 *.sql
 *.sqlite
 *.db
+*.csv
 
 # IDE settings
 .vscode/
